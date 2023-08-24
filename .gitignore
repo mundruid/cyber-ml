@@ -1,6 +1,9 @@
 .venv
+.env
 .vscode
 .DS_Store
 top-1m.csv
 tmp
 data/blog_show_data/mirai.pcap
+pandasai.log
+cache
