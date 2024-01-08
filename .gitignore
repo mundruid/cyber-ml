@@ -7,3 +7,4 @@ tmp
 data/blog_show_data/mirai.pcap
 pandasai.log
 cache
+__pycache__
