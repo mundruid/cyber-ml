@@ -4,6 +4,7 @@ import numpy as np
 
 from scapy.all import *
 
+
 def pcap_to_dataframe(pcap_reader: PcapReader) -> pd.DataFrame:
     """Converts raw packet capture to a Pandas dataframe.
 
