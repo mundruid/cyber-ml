@@ -8,3 +8,6 @@ data/blog_show_data/mirai.pcap
 pandasai.log
 cache
 __pycache__
+
+data/blog_fe/benign_features.pkl
+data/blog_fe/mirai_features.pkl
