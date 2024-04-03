@@ -1,7 +1,10 @@
 """Utility functions to read pcaps and convert to different structures for data analytics"""
+
 import pandas as pd
 import numpy as np
+import dpkt
 
+from collections import defaultdict
 from scapy.all import *
 
 
@@ -81,3 +84,56 @@ def pcap_to_dataframe(pcap_reader: PcapReader) -> pd.DataFrame:
     )
 
     return df
+
+
+def extract_flows(pcap_file):
+    packets = rdpcap(pcap_file)
+    flows = {}
+
+    for packet in packets:
+        if IP in packet:
+            src_ip = packet[IP].src
+            dst_ip = packet[IP].dst
+            src_port = packet[IP].sport
+            dst_port = packet[IP].dport
+            flow_key = (src_ip, src_port, dst_ip, dst_port)
+
+            if flow_key not in flows:
+                flows[flow_key] = []
+
+            flows[flow_key].append(packet)
+
+    return flows
+
+def extract_conversation(packet_capture_file):
+    conversations = defaultdict(bytes)
+    
+    with open(packet_capture_file, 'rb') as f:
+        pcap = dpkt.pcap.Reader(f)
+        for timestamp, buf in pcap:
+            eth = dpkt.ethernet.Ethernet(buf)
+            if isinstance(eth.data, dpkt.ip.IP):
+                ip = eth.data
+                if isinstance(ip.data, dpkt.tcp.TCP):
+                    tcp = ip.data
+                    key = (ip.src, tcp.sport, ip.dst, tcp.dport)
+                    conversations[key] += tcp.data
+                elif isinstance(ip.data, dpkt.udp.UDP):
+                    udp = ip.data
+                    key = (ip.src, udp.sport, ip.dst, udp.dport)
+                    conversations[key] += udp.data
+    
+    return conversations
+
+# def main():
+#     packet_capture_file = 'your_packet_capture.pcap'
+#     conversations = extract_conversation(packet_capture_file)
+    
+#     # Example: Print the contents of a specific conversation
+#     for key, data in conversations.items():
+#         src_ip, src_port, dst_ip, dst_port = key
+#         print(f"Conversation between {src_ip}:{src_port} and {dst_ip}:{dst_port}")
+#         print(data)
+
+# if __name__ == "__main__":
+#     main()
