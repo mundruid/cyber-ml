@@ -11,3 +11,4 @@ __pycache__
 
 data/blog_fe/benign_features.pkl
 data/blog_fe/mirai_features.pkl
+tree.*
