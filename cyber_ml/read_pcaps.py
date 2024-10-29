@@ -8,11 +8,11 @@ from collections import defaultdict
 from scapy.all import *
 
 
-def pcap_to_dataframe(pcap_reader: PcapReader) -> pd.DataFrame:
+def pcap_to_dataframe(pcap_reader: scapy.plist.PacketList) -> pd.DataFrame:
     """Converts raw packet capture to a Pandas dataframe.
 
     Args:
-        pcap_reader (PcapReader): packet capture read using scapy
+        pcap_reader (scapy.plist.PacketList): packet capture read using scapy
 
     Returns:
         pd.DataFrame: dataframe with pcap data
@@ -128,7 +128,7 @@ def extract_conversation(packet_capture_file):
 # def main():
 #     packet_capture_file = 'your_packet_capture.pcap'
 #     conversations = extract_conversation(packet_capture_file)
-    
+
 #     # Example: Print the contents of a specific conversation
 #     for key, data in conversations.items():
 #         src_ip, src_port, dst_ip, dst_port = key
